@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đồ sọp pii - Tạo link nhận voucher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fdfaf9; }
+        /* Hiệu ứng viền răng cưu cho voucher giống ảnh mẫu */
+        .voucher-edge { background: radial-gradient(circle, transparent 4px, #ea580c 4px) -4px -4px / 12px 12px; }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <div class="pt-12 pb-6 text-center">
+        <div class="w-14 h-14 bg-[#f05123] rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-md shadow-orange-200">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
+            </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-800 mb-1">đồ sọp pii</h1>
+        <p class="text-[13px] text-gray-500 font-medium">áp mã giảm giá độc quyền<br><span class="text-gray-400 font-normal">Chuyển đổi link nhận voucher độc quyền Facebook</span></p>
+    </div>
+
+    <div class="max-w-[460px] mx-auto bg-white rounded-[24px] shadow-sm border border-gray-100 p-5 space-y-5">
+        
+        <div>
+            <label class="block text-[14px] font-medium text-gray-800 mb-2">Link sản phẩm Shopee</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                    </svg>
+                </div>
+                <input type="text" id="inputLink" placeholder="Dán link sản phẩm ngắn hoặc dài tại đây..." 
+                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#f05123] focus:ring-1 focus:ring-[#f05123] text-sm text-gray-700 transition" />
+            </div>
+        </div>
+
+        <button onclick="processLink()" id="btnSubmit" class="w-full bg-[#f05123] hover:bg-[#e0451a] text-white font-semibold py-3 rounded-xl text-[15px] flex items-center justify-center gap-2 transition duration-200 shadow-sm disabled:bg-gray-400">
+            <span id="btnText">Tạo link</span>
+        </button>
+
+        <div id="resultArea" class="hidden space-y-4 pt-2 border-t border-gray-100">
+            <div class="bg-[#f0fcf5] border border-[#c4ebd3] rounded-xl p-3 flex items-center justify-between gap-3">
+                <p id="outputLinkText" class="text-[#10b981] text-[13px] font-mono break-all line-clamp-1"></p>
+                <button onclick="copyToClipboard()" class="text-[#10b981] shrink-0 p-1 hover:bg-[#d1f4e0] rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="copyToClipboard()" class="flex-1 bg-white border border-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-[14px] flex items-center justify-center gap-2 hover:bg-gray-50 transition">
+                    Copy link
+                </button>
+                <a href="https://www.facebook.com" target="_blank" class="flex-1 bg-[#1877f2] text-white font-semibold py-2.5 rounded-xl text-[14px] flex items-center justify-center gap-2 hover:bg-[#166fe5] transition shadow-sm">
+                    Đến Facebook
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-[#f0f4ff] rounded-xl p-4 text-[13px]">
+            <p class="font-semibold text-[#3b5998] mb-2">Hướng dẫn nhận voucher:</p>
+            <ul class="space-y-2 text-[#4a649b]">
+                <li class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-[#dbe4ff] text-[#3b5998] flex justify-center items-center font-bold text-[11px]">1</span> Bấm <b>Copy link</b> ở trên</li>
+                <li class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-[#dbe4ff] text-[#3b5998] flex justify-center items-center font-bold text-[11px]">2</span> Bấm <b>Đến Facebook</b> để mở bài viết</li>
+                <li class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-[#dbe4ff] text-[#3b5998] flex justify-center items-center font-bold text-[11px]">3</span> <b>Dán link</b> vào bình luận bài viết</li>
+                <li class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-[#dbe4ff] text-[#3b5998] flex justify-center items-center font-bold text-[11px]">4</span> Mở link &rarr; bấm <b>Mua hàng</b> &rarr; nhận voucher</li>
+            </ul>
+        </div>
+
+        <div class="bg-[#fffdf6] border border-[#fdf2d8] rounded-xl p-4">
+            <h3 class="font-bold text-gray-800 text-[14px] flex items-center gap-2 mb-3">Làm sao để nhận voucher và mua hàng?</h3>
+            <ol class="list-decimal pl-5 text-[13px] text-gray-600 space-y-2 mb-5">
+                <li>Vào <b>Shopee</b> &rarr; mở sản phẩm &rarr; <b>Sao chép liên kết</b>.</li>
+                <li>Dán link vào ô phía trên &rarr; bấm <b>Tạo link</b>.</li>
+                <li>Bấm <b>Copy link</b> &rarr; dán vào bình luận bài viết.</li>
+                <li>Mở link trong <b>app Shopee</b> &rarr; <b>Mua hàng</b> &rarr; áp voucher.</li>
+            </ol>
+
+            <div class="space-y-3">
+                <div class="flex bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm h-[90px]">
+                    <div class="w-1/3 bg-[#ea580c] relative flex flex-col items-center justify-center text-white voucher-edge">
+                        <div class="w-10 h-10 bg-[#1877f2] rounded-full flex items-center justify-center mb-1 border-2 border-white">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </div>
+                        <span class="text-[10px] font-medium">Facebook</span>
+                    </div>
+                    <div class="w-2/3 p-2.5 flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-[14px] leading-tight">giảm 20% Giảm tối đa<br>250kđ</h4>
+                            <p class="text-gray-500 text-[11px] mt-0.5">Đơn tối thiểu 50kđ</p>
+                            <span class="inline-block mt-1 text-[#ea580c] border border-[#ea580c] rounded px-1 py-0.5 text-[9px] font-medium">Độc Quyền Facebook</span>
+                            <div class="flex items-center text-[10px] text-gray-400 mt-1">hết hạn trong: Còn 1 ngày <span class="text-[#3b82f6] ml-1">Điều kiện</span></div>
+                        </div>
+                        <div class="w-5 h-5 rounded-full border border-gray-300 mr-1 flex-shrink-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastMsg" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg text-sm transition-opacity duration-300 opacity-0 pointer-events-none">
+        Đã copy link thành công!
+    </div>
+
+    <script>
+        const MY_AFFILIATE_ID = "17368740336"; // Điền sẵn ID của bạn
+        const MY_SUB_ID = "facebook";
+        let generatedUrl = "";
+
+        // Hàm lọc và làm sạch cấu trúc link dài Shopee
+        function cleanShopeeUrl(url) {
+            let match = url.match(/shopee\.vn\/product\/(\d+)\/(\d+)/);
+            if (match) return `https://shopee.vn/product/${match[1]}/${match[2]}`;
+            
+            match = url.match(/shopee\.vn\/[^/]+\/(\d+)\/(\d+)/);
+            if (match) return `https://shopee.vn/product/${match[1]}/${match[2]}`;
+            
+            match = url.match(/i\.(\d+)\.(\d+)/);
+            if (match) return `https://shopee.vn/product/${match[1]}/${match[2]}`;
+            
+            return url.split('?')[0];
+        }
+
+        async function processLink() {
+            const inputLink = document.getElementById('inputLink').value.trim();
+            const btnSubmit = document.getElementById('btnSubmit');
+            const btnText = document.getElementById('btnText');
+            
+            if (!inputLink) {
+                alert("Vui lòng dán link Shopee!");
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnText.innerText = "Đang xử lý...";
+
+            let targetUrl = inputLink;
+
+            // Nếu khách dán link ngắn, gọi API Vercel để lấy link dài
+            if (inputLink.includes("s.shopee.vn") || inputLink.includes("shopee.vn/universal-link")) {
+                try {
+                    const res = await fetch(`/api/resolve?url=${encodeURIComponent(inputLink)}`);
+                    const data = await res.json();
+                    if (data.redirectUrl) {
+                        targetUrl = data.redirectUrl;
+                    }
+                } catch (e) {
+                    console.error("Lỗi giải mã link ngắn, tự động chuyển sang xử lý thô:", e);
+                }
+            }
+
+            // Tiến hành làm sạch link rác
+            const cleanUrl = cleanShopeeUrl(targetUrl);
+            
+            // Đóng gói link affiliate chuẩn an_redir
+            generatedUrl = `https://s.shopee.vn/an_redir?origin_link=${encodeURIComponent(cleanUrl)}&affiliate_id=${MY_AFFILIATE_ID}&sub_id=${MY_SUB_ID}&deep_and_deferred=1`;
+
+            // Xuất kết quả lên màn hình
+            document.getElementById('outputLinkText').innerText = generatedUrl;
+            document.getElementById('resultArea').classList.remove('hidden');
+            
+            btnSubmit.disabled = false;
+            btnText.innerText = "Tạo link";
+        }
+
+        function copyToClipboard() {
+            if (!generatedUrl) return;
+            navigator.clipboard.writeText(generatedUrl).then(() => {
+                const toast = document.getElementById('toastMsg');
+                toast.classList.remove('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('opacity-0');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
